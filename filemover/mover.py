@@ -301,7 +301,9 @@ def update_file_imports(
                 # Build replacement code for the entire import statement
                 parts = [alias_to_str(a) for a in new_aliases]
                 new_code = f"import {', '.join(parts)}"
-                modifications.append((node.lineno, getattr(node, 'end_lineno', node.lineno), new_code))
+                # Preserve indentation for import statements that appear inside indented blocks
+                indent = ' ' * getattr(node, 'col_offset', 0)
+                modifications.append((node.lineno, getattr(node, 'end_lineno', node.lineno), indent + new_code))
         elif isinstance(node, ast.ImportFrom):
             module = node.module or ''
             # Two cases: absolute import (level == 0) or relative import (level > 0)
@@ -318,7 +320,9 @@ def update_file_imports(
                     # Build replacement code
                     parts_list = [alias_to_str(a) for a in new_names]
                     new_code = f"from {new_module_name} import {', '.join(parts_list)}"
-                    modifications.append((node.lineno, getattr(node, 'end_lineno', node.lineno), new_code))
+                    # Preserve indentation for import statements that appear inside indented blocks
+                    indent = ' ' * getattr(node, 'col_offset', 0)
+                    modifications.append((node.lineno, getattr(node, 'end_lineno', node.lineno), indent + new_code))
                     continue
                 # Scenario 2: from old_parent import old_name -> from new_parent import new_name
                 if module == old_parent:
@@ -338,7 +342,9 @@ def update_file_imports(
                         if new_parent:
                             parts_list = [alias_to_str(a) for a in new_aliases]
                             new_code = f"from {new_parent} import {', '.join(parts_list)}"
-                            modifications.append((node.lineno, getattr(node, 'end_lineno', node.lineno), new_code))
+                            # Preserve indentation for import statements that appear inside indented blocks
+                            indent = ' ' * getattr(node, 'col_offset', 0)
+                            modifications.append((node.lineno, getattr(node, 'end_lineno', node.lineno), indent + new_code))
                         else:
                             # new_module is top-level.  We only support rewriting when a single name is imported.
                             # Otherwise we risk generating invalid code for other names.
@@ -350,7 +356,9 @@ def update_file_imports(
                                     new_code = f"import {alias_obj.name} as {local_name}"
                                 else:
                                     new_code = f"import {alias_obj.name}"
-                                modifications.append((node.lineno, getattr(node, 'end_lineno', node.lineno), new_code))
+                                # Preserve indentation for import statements that appear inside indented blocks
+                                indent = ' ' * getattr(node, 'col_offset', 0)
+                                modifications.append((node.lineno, getattr(node, 'end_lineno', node.lineno), indent + new_code))
                             # For multiple names when new_module is top-level, skip rewriting.
             else:
                 # Relative import. We compute the absolute module of the imported names
@@ -419,7 +427,9 @@ def update_file_imports(
                             else:
                                 new_code = None
                     if new_code:
-                        modifications.append((node.lineno, getattr(node, 'end_lineno', node.lineno), new_code))
+                        # Preserve indentation for import statements that appear inside indented blocks
+                        indent = ' ' * getattr(node, 'col_offset', 0)
+                        modifications.append((node.lineno, getattr(node, 'end_lineno', node.lineno), indent + new_code))
     # If no modifications, return early
     if not modifications:
         return
