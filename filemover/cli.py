@@ -90,11 +90,24 @@ def move_file_cmd(src: str, dst: str, repo_root: str | None) -> None:
     new location.
     """
     src_path, dst_path, root = resolve_paths(src, dst, repo_root)
+    # Ensure the source is a Python file
     if src_path.suffix != ".py":
         raise click.UsageError("move-file expects SRC to be a .py file")
-    if dst_path.exists() and dst_path.is_dir():
-        raise click.UsageError("Destination for move-file may not be an existing directory")
-    click.echo(f"Moving {src_path.relative_to(root)} to {dst_path.relative_to(root)} and updating imports…")
+    # Determine whether the destination should be treated as a directory.  If the
+    # argument string ends with a path separator or points to an existing
+    # directory, interpret it as a directory and append the source file name.
+    dest_is_dir_hint = False
+    try:
+        import os as _os
+        if isinstance(dst, str) and dst.endswith(_os.path.sep):
+            dest_is_dir_hint = True
+    except Exception:
+        pass
+    if (dst_path.exists() and dst_path.is_dir()) or dest_is_dir_hint:
+        dst_path = (dst_path / src_path.name).resolve()
+    click.echo(
+        f"Moving {src_path.relative_to(root)} to {dst_path.relative_to(root)} and updating imports…"
+    )
     try:
         move_file(src_path, dst_path, root)
     except Exception as exc:
