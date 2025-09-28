@@ -52,10 +52,22 @@ def resolve_paths(
         absolute ``Path`` objects.  ``src_path`` and ``dst_path`` are
         normalised (no ``..`` components) and relative to ``repo_root``.
     """
-    cwd = pathlib.Path.cwd()
-    root = pathlib.Path(repo_root) if repo_root else cwd
+    # Always resolve the repository root to an absolute path.  This ensures that
+    # later calls to Path.relative_to() succeed when computing relative paths
+    # for status messages.  If repo_root is None or empty, default to the
+    # current working directory (already absolute).
+    cwd = pathlib.Path.cwd().resolve()
+    if repo_root:
+        # Interpret repo_root relative to the current working directory and
+        # canonicalise it.  Without resolve(), a relative repo_root (e.g. '.')
+        # would cause ValueError when calling Path.relative_to() later.
+        root = (cwd / repo_root).resolve() if not pathlib.Path(repo_root).is_absolute() else pathlib.Path(repo_root).resolve()
+    else:
+        root = cwd
     if not root.is_dir():
         raise click.UsageError(f"Repository root {root!s} does not exist or is not a directory")
+    # Resolve source and destination relative to the repository root if they
+    # are not absolute.  Use resolve() to produce absolute paths.
     src_path = (root / src).resolve() if not pathlib.Path(src).is_absolute() else pathlib.Path(src).resolve()
     dst_path = (root / dst).resolve() if not pathlib.Path(dst).is_absolute() else pathlib.Path(dst).resolve()
     return src_path, dst_path, root
