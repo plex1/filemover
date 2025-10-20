@@ -166,6 +166,24 @@ Contributions and bug reports are welcome! Please open an issue or
 submit a pull request if you find a problem or have suggestions for
 improvements.
 
+## VS-Code extension development
+
+### Compile and Package
+
+```
+ docker run --rm -it   -v "$PWD":/workspace -w /workspace   mcr.microsoft.com/vscode/devcontainers/typescript-node:1-22   bash -lc 'node -v && npm -v && npm ci --no-audit --no-fund --loglevel=warn && npm run -s compile && npx vsce package'
+```
+
+### Run in Developer Mode
+
+- Use settings in `.vscode/launch.json`
+- Toggle Developer Tools → Console tab.
+
+### Install
+```
+code --install-extension filemover-auto-imports-0.0.1.vsix
+```
+
 ## License
 
 This project is provided for educational and refactoring purposes and

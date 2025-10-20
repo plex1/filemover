@@ -4,6 +4,11 @@
     "description": "Automatically updates Python imports after file/folder renames by calling the 'filemover' package.",
     "version": "0.0.1",
     "publisher": "plex1",
+    "license": "MIT",
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/plex1/filemover"
+    },
     "engines": {
         "vscode": "^1.84.0"
     },
