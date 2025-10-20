@@ -2,6 +2,7 @@
 *.swp
 *.pkl
 *.png
+!media/icon.png
 output*
 data/*
 *.env
@@ -18,4 +19,9 @@ temp/*
 *.pickle
 tmp*
 *.venv
+package-lock.json
+*.bk
+/out/*
+node_modules/*
+*.vsix
 
