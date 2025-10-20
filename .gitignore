@@ -2,6 +2,7 @@
 *.swp
 *.pkl
 *.png
+!media/icon.png
 output*
 data/*
 *.env

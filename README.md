@@ -160,12 +160,6 @@ This extension calls your local `filemover` Python package to rewrite absolute i
   - Your workspace folder is a proper repo root (imports are computed relative to this).
 
 
-## Contributing
-
-Contributions and bug reports are welcome! Please open an issue or
-submit a pull request if you find a problem or have suggestions for
-improvements.
-
 ## VS-Code extension development
 
 ### Compile and Package
@@ -183,6 +177,12 @@ improvements.
 ```
 code --install-extension filemover-auto-imports-0.0.1.vsix
 ```
+
+## Contributing
+
+Contributions and bug reports are welcome! Please open an issue or
+submit a pull request if you find a problem or have suggestions for
+improvements.
 
 ## License
 
