@@ -1,0 +1,45 @@
+{
+    "name": "filemover-auto-imports",
+    "displayName": "FileMover Auto-Imports",
+    "description": "Automatically updates Python imports after file/folder renames by calling the 'filemover' package.",
+    "version": "0.0.1",
+    "publisher": "your-name-or-org",
+    "engines": {
+        "vscode": "^1.84.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "onStartupFinished"
+    ],
+    "main": "./out/extension.js",
+    "contributes": {
+        "configuration": {
+            "title": "FileMover Auto-Imports",
+            "properties": {
+                "filemover.pythonPath": {
+                    "type": "string",
+                    "default": "python",
+                    "description": "Path to the Python interpreter that has the 'filemover' package installed."
+                },
+                "filemover.extraArgs": {
+                    "type": "array",
+                    "default": [],
+                    "description": "Extra command-line args to pass to Python (e.g. ['-u'])."
+                }
+            }
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./"
+    },
+    "devDependencies": {
+        "@types/node": "^20.0.0",
+        "@types/vscode": "^1.84.0",
+        "typescript": "^5.0.0",
+        "vsce": "^2.15.0"
+    }
+}

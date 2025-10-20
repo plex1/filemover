@@ -128,6 +128,38 @@ Imports such as `import plugins.foo` will be rewritten to
   invalid code.
 - Files containing syntax errors are skipped.
 
+# FileMover Auto-Imports (VS Code)
+
+Automatically fix Python imports after you rename/move files or folders in VS Code.  
+This extension calls your local `filemover` Python package to rewrite absolute imports across the workspace.
+
+## Requirements
+
+- Python 3.8+ installed
+- The `filemover` package installed in the Python environment configured for this extension  
+  e.g. `pip install -e /path/to/filemover_repo` or `pip install filemover` (if you publish it)
+
+## Settings
+
+- `filemover.pythonPath` (default: `python`)  
+  Path to Python interpreter that has `filemover` installed.
+- `filemover.extraArgs` (default: `[]`)  
+  Extra args for Python (e.g., `["-u"]`).
+
+## How it works
+
+- Listens for `onDidRenameFiles` (file **and** folder moves).
+- Computes the old and new dotted module names relative to the workspace root.
+- Calls into `filemover` to update imports across the repository.
+
+## Troubleshooting
+
+- If nothing happens on rename, check:
+  - `filemover` is importable: run `python -c "import filemover; print(filemover.__file__)"`.
+  - The extension's Python path setting points to the env where `filemover` is installed.
+  - Your workspace folder is a proper repo root (imports are computed relative to this).
+
+
 ## Contributing
 
 Contributions and bug reports are welcome! Please open an issue or
