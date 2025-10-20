@@ -3,7 +3,7 @@
     "displayName": "FileMover Auto-Imports",
     "description": "Automatically updates Python imports after file/folder renames by calling the 'filemover' package.",
     "version": "0.0.1",
-    "publisher": "your-name-or-org",
+    "publisher": "plex1",
     "engines": {
         "vscode": "^1.84.0"
     },

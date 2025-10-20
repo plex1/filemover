@@ -18,4 +18,8 @@ temp/*
 *.pickle
 tmp*
 *.venv
+package-lock.json
+*.bk
+/out/*
+node_modules/*
 
