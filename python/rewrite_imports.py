@@ -21,7 +21,7 @@ def main():
         # Import here so extension fails gracefully if user hasn't installed filemover yet
         from filemover.mover import compute_module_path, update_imports
     except Exception as e:
-        print("Could not import 'filemover'. Make sure it is installed in the selected Python environment.", file=sys.stderr)
+        print("Could not import 'filemover'. Make sure it is installed in the selected Python environment. E.g. via command 'pip install git+https://github.com/plex1/filemover'", file=sys.stderr)
         print(str(e), file=sys.stderr)
         sys.exit(3)
 
