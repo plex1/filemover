@@ -158,6 +158,7 @@ This extension calls your local `filemover` Python package to rewrite absolute i
   - `filemover` is importable: run `python -c "import filemover; print(filemover.__file__)"`.
   - The extension's Python path setting points to the env where `filemover` is installed.
   - Your workspace folder is a proper repo root (imports are computed relative to this).
+  - In some cases you might want to activate autosave: `"files.autoSave": "afterDelay", "files.autoSaveDelay": 500`
 
 
 ## VS-Code extension development
