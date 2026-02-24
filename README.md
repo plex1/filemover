@@ -157,7 +157,8 @@ This extension calls your local `filemover` Python package to rewrite absolute i
 - If nothing happens on rename, check:
   - `filemover` is importable: run `python -c "import filemover; print(filemover.__file__)"`.
   - The extension's Python path setting points to the env where `filemover` is installed.
-  - Your workspace folder is a proper repo root (imports are computed relative to this).
+  - Your workspace folder is a proper repo root or the package src root (imports are computed relative to this).
+  - Close all open files in the editor before moving
 
 
 ## VS-Code extension development
@@ -171,7 +172,7 @@ This extension calls your local `filemover` Python package to rewrite absolute i
 ### Run in Developer Mode
 
 - Use settings in `.vscode/launch.json`
-- Toggle Developer Tools → Console tab.
+- Toggle Developer Tools → Console tab. To see log messages.
 
 ### Install
 ```
