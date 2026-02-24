@@ -137,7 +137,7 @@ This extension calls your local `filemover` Python package to rewrite absolute i
 
 - Python 3.8+ installed
 - The `filemover` package installed in the Python environment configured for this extension  
-  e.g. `pip install -e /path/to/filemover_repo` or `pip install filemover` (if you publish it)
+  e.g. `pip install -e /path/to/filemover_repo` or `pip install git+https://github.com/plex1/filemover`
 
 ## Settings
 
@@ -187,5 +187,4 @@ improvements.
 
 ## License
 
-This project is provided for educational and refactoring purposes and
-does not include a specific license. Use it at your own risk.
+See LICENCE.TXT
