@@ -12,9 +12,72 @@ function log(msg: string) {
     console.log(`[FileMover] ${now()} ${msg}`);
 }
 
+function isPathInside(parent: string, child: string): boolean {
+    const rel = path.relative(parent, child);
+    return rel === "" || (!rel.startsWith("..") && !path.isAbsolute(rel));
+}
+
+function findRepoRoot(startPath: string): string {
+    const original = path.resolve(startPath);
+    let current = original;
+
+    while (true) {
+        if (
+            fs.existsSync(path.join(current, "pyproject.toml")) ||
+            fs.existsSync(path.join(current, "setup.py")) ||
+            fs.existsSync(path.join(current, ".git"))
+        ) {
+            return current;
+        }
+
+        const parent = path.dirname(current);
+        if (parent === current) {
+            return original;
+        }
+        current = parent;
+    }
+}
+
+function hasImportablePackage(root: string): boolean {
+    try {
+        const entries = fs.readdirSync(root, { withFileTypes: true });
+        return entries.some(
+            (entry) =>
+                entry.isDirectory() && fs.existsSync(path.join(root, entry.name, "__init__.py"))
+        );
+    } catch {
+        return false;
+    }
+}
+
 function getWorkspaceRootForUri(uri: vscode.Uri): string | undefined {
     const folder = vscode.workspace.getWorkspaceFolder(uri);
-    return folder?.uri.fsPath;
+    if (!folder) return undefined;
+
+    const workspaceRoot = folder.uri.fsPath;
+    const repoRoot = findRepoRoot(workspaceRoot);
+    const candidates = [path.join(repoRoot, "src"), path.join(repoRoot, "sources"), repoRoot]
+        .filter((candidate, i, all) => all.indexOf(candidate) === i)
+        .filter((candidate) => {
+            try {
+                return fs.statSync(candidate).isDirectory();
+            } catch {
+                return false;
+            }
+        })
+        .filter((candidate) => isPathInside(candidate, uri.fsPath));
+
+    for (const candidate of candidates) {
+        if (hasImportablePackage(candidate)) {
+            return candidate;
+        }
+    }
+
+    if (candidates.length > 0) {
+        return candidates[0];
+    }
+
+    return workspaceRoot;
 }
 
 function runPythonHelper(
